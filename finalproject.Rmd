@@ -1,0 +1,40 @@
+---
+title: "Problem Set 5"
+author: "Alex, Micah, Scott, and David"
+date: "12/01/2021"
+output:
+  pdf_document: default
+  word_document: default
+name: Kevin Yi 
+---
+
+```{r load packages, message = FALSE}
+library(data.table)
+
+library(sandwich)
+library(lmtest)
+
+library(AER) 
+
+library(ggplot2) 
+library(patchwork)
+```
+
+```{r global options, include = FALSE}
+knitr::opts_chunk$set(include = FALSE, message = FALSE, warning = FALSE )
+
+knitr::knit_engines$set(problem_description = function(options) {
+  code <- paste(options$code, collapse = "\n")
+})
+
+```
+
+```{r QUESTION 1, child='./questions/question_1.Rmd'}
+```
+\newpage
+```{r QUESTION 2, child='./questions/question_2.Rmd'}
+```
+\newpage
+```{r QUESTION 3, child='./questions/question_3_optional.Rmd'}
+```
+\newpage
