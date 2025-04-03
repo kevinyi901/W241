@@ -1,2 +1,2 @@
-# DATASCI 241: Experiments and Causal Inference (Spring 2025
+# DATASCI 241: Experiments and Causal Inference (Spring 2025) Final Experiment
 
