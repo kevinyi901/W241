@@ -1,127 +1,275 @@
-# Vietnam Draft Lottery 
-
-```{problem_description}
-A famous paper (http://sites.duke.edu/niou/files/2011/06/Angrist_lifetime-earningsmall.pdf) by Angrist exploits the randomized lottery for the Vietnam draft to estimate the effect of education on wages. (*Don’t worry about reading this article, it is just provided to satisfy your curiosity; you can answer the question below without referring to it. In fact, it may be easier for you not to, since he has some complications to deal with that the simple data we’re giving you do not.*)
-
-Problem Setup
-
-Angrist’s idea is this: During the Vietnam era, draft numbers were determined randomly by birth date -- the army would literally randomly draw birthdays out of a hat, and those whose birthdays came up sooner were higher up on the list to be drafted first. For example, all young American men born on May 2 of a given year might have draft number 1 and be the first to be called up for service, followed by November 13 who would get draft number 2 and be second, etc. The higher-ranked (closer to 1) your draft number, the likelier it was you would be drafted.
-
-We have generated a fake version of this data for your use in this project. You can find real information (https://www.sss.gov/About/History-And-Records/lotter1). While we are defining having a high draft number as falling at 80, in reality in 1970 any number lower than 195 would have been a "high" draft number, in 1971 anything lower than 125 would have been "high". 
-
-High draft rank induced many Americans to go to college, because being a college student was an excuse to avoid the draft -- so those with higher-ranked draft numbers attempted to enroll in college for fear of being drafted, whereas those with lower-ranked draft numbers felt less pressure to enroll in college just to avoid the draft (some still attended college regardless, of course). Draft numbers therefore cause a natural experiment in education, as we now have two randomly assigned groups, with one group having higher mean levels of education, those with higher draft numbers, than another, those with lower draft numbers. (In the language of econometricians, we say the draft number is “an instrument for education,” or that draft number is an “instrumental variable.”)
-
-Some simplifying assumptions:
-
-- Suppose that these data are a true random sample of IRS records and that these records measure every living American’s income without error.
-- Suppose that this data is the result of the following SQL query (this information is informative for the differential attrition question): 
+# Abstract
 
 
-{SQL} 
-SELECT 
-  ssearning AS earnings 
-    years_of_schooling AS years_education
-    ein AS id
-FROM irs_income_1980 
-JOIN draft_status 
-ON ssearning.id = draft_status.id
-DROP id 
+# Introduction and Purpose
+
+
+# Literature Review 
+
+
+# Power Analysis
+
+```{r power analysis }
+# Calculate Power Value if 10% difference between treatment and control with 100 samples each. 
+
+# Generate control values with 75% 0s (FB No Response) and 25% 1s (FB Response)
+d1 <- data.table(treatment = rep(0, 500))
+d1[, response := c(rep(0, 375), rep(1, 125))]
+
+# Generate treatment values with 65% 0s and 35% 1s. Our treatment has a 10% increase in FB response than the control. 
+d2 <- data.table(treatment = rep(1, 500))
+d2[ , response := c(rep(0, 325), rep(1, 175))]
+
+# Concatenate row-wise
+data <- rbind(d1, d2)
+
+# Check the average treatment effect (ATE)
+ate <- mean(data$response[data$treatment == 1]) - mean(data$response[data$treatment == 0])
+ate
+
+# fill this in with the p-values from your power analysis
+t_test_p_values <- rep(NA, 1000) 
+
+for(sim in 1:1000) { 
+    # Resample and randomly selects 100 treatment and 100 control without replacement
+    sample <- data[, .SD[sample(.N, 100)], by = treatment] 
+
+    # Run the t-test
+   test_result <- t.test(response~treatment, data=sample)
+    
+    # Store Pvalue from the T.Test
+    t_test_p_values[sim] <-  test_result$p.value
+  }
+
+# Find our power. Find P-value less than .05
+reject_null_count<- sum(t_test_p_values<= 0.05)
+
+power_value_10 <- reject_null_count/1000*100
+power_value_10
+
+
+
+# Calculate Power Value if 25% difference between treatment and control with 100 samples each. 
+
+# Generate control values with 75% 0s (FB No Response) and 25% 1s (FB Response)
+d1 <- data.table(treatment = rep(0, 500))
+d1[, response := c(rep(0, 375), rep(1, 125))]
+
+# Generate treatment values with 50% 0s and 50% 1s. Our treatment has a 10% increase in FB response than the control. 
+d2 <- data.table(treatment = rep(1, 500))
+d2[ , response := c(rep(0, 250), rep(1, 250))]
+
+# Concatenate row-wise
+data <- rbind(d1, d2)
+
+# Check the average treatment effect (ATE)
+ate <- mean(data$response[data$treatment == 1]) - mean(data$response[data$treatment == 0])
+ate
+
+# fill this in with the p-values from your power analysis
+t_test_p_values <- rep(NA, 1000) 
+
+for(sim in 1:1000) { 
+    # Resample and randomly selects 100 treatment and 100 control without replacement
+    sample <- data[, .SD[sample(.N, 100)], by = treatment] 
+
+    # Run the t-test
+   test_result <- t.test(response~treatment, data=sample)
+    
+    # Store Pvalue from the T.Test
+    t_test_p_values[sim] <-  test_result$p.value
+  }
+
+# Find our power. Find P-value less than .05
+reject_null_count<- sum(t_test_p_values<= 0.05)
+
+power_value_25 <- reject_null_count/1000*100
+power_value_25
+
 ```
+With 100 sample in test and 100 sample in control, we would detect an ATE of 10% difference only 30.5% of the time and an ATE of 25% difference 97.6% of the time. 
 
-```{problem_description}
-- Assume that the true effect of education on income is linear in the number of years of education obtained.
-- Assume all the data points are from Americans born in a single year and we do not need to worry about cohort effects of any kind.
-```
+# Hypothesis
 
+
+# Methods/Modeling
+
+
+## Data Cleaning
 ```{r load draft data}
-d <- fread('../data/draft_data.csv')
+d <- fread('./Datasci241 Experiment result - Combined.csv')
 
 head(d)
 ```
 
-## Observational esteimate
-Suppose that you had not run an experiment. Estimate the "effect" of each year of education on income as an observational researcher might, by just running a regression of years of education on income (in R-ish, `income ~ years_education`). What does this naive regression suggest?
 
-```{r observational model, include=TRUE} 
-model_observational <- lm(income ~ years_education, data = d)
-model_observational
-```
+```{r data cleaning, include=TRUE}
+# Combine treatment categories to one column
+d[, emoji := ifelse(non_facial_emoji == 1, "non facial emoji",
+               ifelse(facial_emoji == 1, "facial emoji",
+               ifelse(no_emoji == 1, "no emoji", NA_character_)))]
 
-**Answer:** ...
-The regression model suggests that every year of education leads to an increase on income by `r model_observational$coefficients["years_education"]` for males at the time. 
-
-## Evaluating observational estimate 
-Continue to suppose that we did not run the experiment, but that we saw the result that you noted in part 1. Tell a concrete story about why you don't believe that observational result tells you anything causal. 
-
-**Answer:** ...
-There are a lot of potential confounding variables and self selection biases that might lead to higher income. For example, people from affluent households could be more likely to attend college and get a high paying job through connections that they have through friends and family. In this case, it was affluence and connections that resulted in higher income rather than education. 
-
-## Natural experiment effect on education
-Now, let’s get to using the natural experiment. Define "having a high-ranked draft number" as having a draft number between 1-80. For the remaining 285 days of the year, consider them having a "low-ranked" draft number). Create a variable in your dataset called `high_draft` that indicates whether each person has a high-ranked draft number or not. Using a regression, estimate the effect of having a high-ranked draft number on years of education obtained. Report the estimate and a correctly computed standard error. (*Hint: How is the assignment to having a draft number conducted? Does random assignment happen at the individual level? Or, at some higher level?)
-
-```{r draft effect on education, include=TRUE}
-d[, high_draft := ifelse(draft_number >= 1 & draft_number <= 80, 1, 0)]
+# Drop unused column 
+d[, c("non_facial_emoji", "facial_emoji", "no_emoji", "seller_name", "counter", "response time", "condition", 
+      "price", "V18", "Rough Numbers", "V20" , "V21") := NULL]
 
 
-model_education <- lm(years_education ~ high_draft, data = d)
-summary(model_education)
-```
 
-**Answer:** ...
+# Normalize all day values. 
+d[day == "Fri", day := "Friday"]
+d[day == "Mon", day := "Monday"]
+d[day == "Sat", day := "Saturday"]
+d[day == "Thu", day := "Thursday"]
+d[day == "Tue", day := "Tuesday"]
 
-The regression model estimates that on average a person with a high draft pick achieves `r summary(model_education)$coefficients["high_draft", "Estimate"]` more years of education than those with low draft pick. The standard error for the coefficient is `r summary(model_education)$coefficients["high_draft", "Std. Error"]`
 
-## Natural experiment effect on income
-Using linear regression, estimate the effect of having a high-ranked draft number on income. Report the estimate and the correct standard error.
 
-```{r draft effect on income, include=TRUE} 
-model_income <- lm(income ~ high_draft, data = d)
-summary(model_income)
-```
+# Convert to ITime using data.table's built-in function:
+d[, msg_time := as.ITime(msg_time, format = "%H:%M:%S")]
 
-**Answer:** ...
-The regression model estimates that on average a person with a high draft pick achieves `r summary(model_income)$coefficients["high_draft", "Estimate"]` in more income than those with low draft pick. The standard error for the coefficient is `r summary(model_education)$coefficients["high_draft", "Std. Error"]`
 
-## Instrumental variables estimate of education on income
-Now, estimate the Instrumental Variables regression to estimate the effect of education on income. To do so, use `AER::ivreg`. After you evaluate your code, write a narrative description about what you learn. 
+head(d)
 
-```{r instrumental variables regression, include=TRUE} 
-library(AER)
+```  
+## Data Exploration
 
-model_iv <- ivreg(income ~ years_education | high_draft, data = d)
-summary(model_iv)
-```
+```{r data exploration, include=TRUE}
 
-**Answer:** ...
+# Bar plot of emoji treatment to ensure balance
+ggplot(d, aes(x = emoji)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Emoji Types",
+    x = "Emoji Type",
+    y = "Count"
+  )
 
-In OLS regression, we perhaps suffer from omitted variable bias where years of schooling does not fully cause income but instead are correlated with other factors. By using the instrumental variables regression, we get a clean variation in number of years of schooling affects earning by correcting for endogeneity. We remove the variation in years of education and only keep the variation due to having high draft rank. Doing so, we find that each year of education results in a increase on income by `r summary(model_iv)$coefficients["years_education", "Estimate"]`. This affect is lower than the result from the OLS model which suggest that our OLS model was overestimating the impact of education on income.  
 
-```{problem_description}
-Just like the other experiments that we've covered in the course, natural experiments rely crucially on satisfying the "exclusion restriction". In the case of a medical trial, we've said this means that there can't be an effect of just "being at the doctor's office" when the doctor is giving you a treatment. In the case of an instrumental variable's setup, the *instrument* (being drafted) cannot affect the outcome (income) in any other way except through its effect on the "endogenous variable" (here, education). 
-```
+# Bar plot of seller gender
+ggplot(d, aes(x = seller_gender)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Seller Gender",
+    x = "Seller Gender",
+    y = "Count"
+  )
 
-## Evaluating the exclusion restriction
-Give one reason this requirement might not be satisfied in this context. In what ways might having a high draft rank affect individuals' income **other** than nudging them to attend more school? 
 
-**Answer:** ...
+# Bar plot of day 
+ggplot(d, aes(x = willing_to_reduce_price)) +
+  geom_bar() +
+  labs(
+    title = "Willingess to Reduce Price",
+    x = "Seller's Response",
+    y = "Count"
+  )
 
-Having high draft rank would lead the person to most likely serve in Vietnam. Serving in Vietnam could lead to PTSD and other issues re-acclimating to normal society thus leading to lower income. 
 
-## Differential attrition
-Conduct a test for the presence of differential attrition by treatment condition. That is, conduct a formal test of the hypothesis that the “high-ranked draft number” treatment has no effect on whether we observe a person’s income. **(Note, that an earning of $0 *actually* means they didn't earn any money -- i.e. earning $0 does not mean that their data wasn't measured. Let's be really, really specific: If you write a model that looks anything like, `lm(income == 0 ~ .)` you've gone the wrong direction.)**
+# Bar plot of Response
+ggplot(d, aes(x = day)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Day Message Sent",
+    x = "Day",
+    y = "Count"
+  )
 
-```{r differential attrition, include=TRUE}
-d$missing_income <- ifelse( d$income >= 0, 1, 0)
+# Bar plot of Response
+ggplot(d, aes(x = day)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Day Message Sent",
+    x = "Day",
+    y = "Count"
+  )
 
-model_differential_attrition <- lm(missing_income ~ high_draft, data = d)
-unique(d$missing_income)  # View all unique values in 'income'
-```
+# Bar plot of Response
+ggplot(d, aes(x = location)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Location",
+    x = "Location",
+    y = "Count"
+  )
 
-**Answer:** ...
-There does not seem to be any attrition in our data. 
 
-## Evaluate differential attrition
-Tell a concrete story about what could be leading to the result in part 7. How might this differential attrition create bias in the estimates of a causal effect?
+#Histogram of time message was sent
+ggplot(d, aes(x = as.numeric(msg_time))) +
+  geom_histogram(binwidth = 3600) +
+  scale_x_continuous(
+    breaks = seq(0, 24 * 3600, by = 3600),
+    labels = function(x) format(as.ITime(x), "%H:%M")
+  ) +
+  labs(
+    title = "Distribution of Message Times",
+    x = "Time of Day (Hours)",
+    y = "Count"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
+  )
+```  
+```{r estimate basic model, include=TRUE}
+model1 <- d[ , lm(willing_to_reduce_price~emoji)]
+summary(model1)
 
-**Answer:** ...
-If having a high-rank draft number causes data attrition, this would cause a bias in the estimate through selection bias and may not represent the original population. For example, people who had high draft picks and served in Vietnam could now be homeless and may not or could not be reached to gain data for the survey. 
+```  
+
+```{r estimate middle model, include=TRUE}
+model2 <- d[ , lm(willing_to_reduce_price~ emoji + seller_gender )]
+summary(model2)
+
+```  
+
+```{r estimate fully saturated model, include=TRUE}
+model3 <- d[ , lm(willing_to_reduce_price~emoji + buyer + msg_time + day + price_drop + just_listed + seller_gender)]
+summary(model3)
+
+```  
+
+```{r check covariate randomeness and collinearity , include=TRUE}
+# Checking for randomness in covariate
+# Do a F-test  to compare full model to model with no predictive features
+null_model  <- d[, lm(willing_to_reduce_price ~ 1)]
+full_model <- d[ , lm(willing_to_reduce_price~ 1 + emoji + buyer + msg_time + day + price_drop + just_listed + seller_gender)]
+anova_mod <- anova(null_model, full_model , test = 'F')
+anova_mod
+
+# Check for multicollinearty
+vif_values <- vif(full_model)
+vif_values
+
+```  
+
+
+```{r estimate fully saturated model with Interaction, include=TRUE}
+# Filter the data.table for only male sellers
+d_male <- d[seller_gender == "M"]
+# Filter the data.table for only female sellers
+f_male <- d[seller_gender == "F"]
+
+model_male <- d_male[, lm(willing_to_reduce_price ~ emoji + buyer + msg_time + day + price_drop + just_listed )]
+
+model_female <- f_male [, lm(willing_to_reduce_price ~ emoji + buyer + msg_time + day + price_drop + just_listed )]
+
+summary(model_male)
+summary(model_female)
+
+```  
+
+# Results
+
+
+# Discussion
+
+
+
+# Conclusions
+
+
+
+
+
+
+
+
