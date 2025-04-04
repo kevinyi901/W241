@@ -129,6 +129,7 @@ d[, msg_time := as.ITime(msg_time, format = "%H:%M:%S")]
 
 
 head(d)
+colSums(is.na(d))
 
 ```  
 ## Data Exploration
@@ -174,16 +175,8 @@ ggplot(d, aes(x = day)) +
     y = "Count"
   )
 
-# Bar plot of Response
-ggplot(d, aes(x = day)) +
-  geom_bar() +
-  labs(
-    title = "Bar Plot of Day Message Sent",
-    x = "Day",
-    y = "Count"
-  )
 
-# Bar plot of Response
+# Bar plot of location
 ggplot(d, aes(x = location)) +
   geom_bar() +
   labs(
@@ -230,9 +223,11 @@ summary(model3)
 ```{r check covariate randomeness and collinearity , include=TRUE}
 # Checking for randomness in covariate
 # Do a F-test  to compare full model to model with no predictive features
-null_model  <- d[, lm(willing_to_reduce_price ~ 1)]
-full_model <- d[ , lm(willing_to_reduce_price~ 1 + emoji + buyer + msg_time + day + price_drop + just_listed + seller_gender)]
-anova_mod <- anova(null_model, full_model , test = 'F')
+null_model <- lm(willing_to_reduce_price ~ 1, data = d)
+full_model <- lm(willing_to_reduce_price ~ 1+ emoji + buyer + msg_time + day + price_drop + just_listed + seller_gender, data = d)
+
+# Perform an F-test
+anova_mod <- anova(null_model, full_model, test = 'F')
 anova_mod
 
 # Check for multicollinearty
