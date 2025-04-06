@@ -1,0 +1,63 @@
+```{r}
+library(ggpubr)
+library(magrittr)
+library(dplyr)
+library(tidyverse)
+library(knitr)
+library(patchwork)
+library(ggplot2)
+library(openxlsx)
+library(lmtest)
+library(sandwich)
+library(stargazer)
+library(xtable)
+library(scales)
+library(e1071)
+library(gtsummary)
+library(readxl)
+library(gt)
+library(gtsummary)
+library(gridExtra)
+library(grid)
+library(gtable)
+library(kableExtra)
+library(snakecase)
+```
+
+# Abstract
+
+
+# Introduction and Purpose
+
+
+# Literature Review 
+
+
+# Power Analysis
+
+With 120 sample in test and 120 sample in control, we would detect an ATE of 10% difference only `r power_value_10`% of the time and an ATE of 25% difference `r power_value_25`% of the time. Based on pilot and our approximate intended sample size of 120 we would detect a true statistically significant result of a 15% ATE `r power_value_15`% of the time. 
+
+
+# Hypothesis
+
+Null Hypothesis $H_0$: Either emoji treatment has no direct impact on willingness to sell or message response rate:
+$$H_0: \beta_{FE} \ = \ 0 \ \ or \ \ \beta_{NFE} = 0$$
+
+Alternative Hypothesis $H_1$: Either of the treatments has an effect on the willingness to sell or message response rate:
+$$H_1: \beta_{FE} \ \not= \ 0 \ \ or \ \ \beta_{NFE} \not= 0$$
+
+# Methods/Modeling
+
+
+## Data Cleaning
+
+Data cleaning process involved manipulation and standardizing of multiple columns. Treatment categories for emoji message types (one-hot encoded for tracking convenience) were consolidated into a single column, irrelevant variables were removed, and Weekday/Weekend categorization was created from `day` variable. Categorical variables were turned into factors with defined levels and time data was formatted for improved interpretability. Column names were altered to lower camel case for consistency and ease of use with rmarkdown latex output configurations. All modification were necessary for clarity and usability of the data, ensuring it was well-suited for subsequent analysis.
+
+
+# Results
+
+
+# Discussion
+
+
+# Conclusions
