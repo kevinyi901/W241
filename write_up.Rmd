@@ -149,6 +149,17 @@ colSums(is.na(d))
 
 ## Tests
 
+Three regression models were developed to evaluate the relationship between message type and a seller’s willingness to reduce price. We tested these models using R standard coeftest() to test the statistical significance of the coefficients in the linear regression models with robust standard error to mitigate potential heteroskedasticity biases in the error estimates. 
+
+Model 1 included a basic specification where the dependent variable, willing_to_reduce_price, was regressed on the primary treatment and control variables: No Emoji, NFE (Non-Facial Emoji), and FE (Facial Emoji) Facebook messages.
+
+Model 2 extended Model 1 by including the seller’s gender as an additional covariate to control for potential gender-related differences in negotiation behavior.
+
+Model 3 further expanded the model by incorporating a broader set of covariates: the buyer identifier, message time, message day, whether the item had experienced a price drop, whether the item was recently listed, and the seller’s gender.
+
+We also explored whether the effect of message type on a seller’s willingness to reduce price varied by the seller’s gender. To assess potential interaction effects between seller gender and message type, we ran the saturated Model 3 separately for male and female sellers. This approach allowed us to examine whether treatment effects differed by gender by filtering the dataset to include only male sellers in one model and only female sellers in another. 
+
+
 # Results
 
 ```{r}
