@@ -1,28 +1,3 @@
-```{r}
-library(ggpubr)
-library(magrittr)
-library(dplyr)
-library(tidyverse)
-library(knitr)
-library(patchwork)
-library(ggplot2)
-library(openxlsx)
-library(lmtest)
-library(sandwich)
-library(stargazer)
-library(xtable)
-library(scales)
-library(e1071)
-library(gtsummary)
-library(readxl)
-library(gt)
-library(gtsummary)
-library(gridExtra)
-library(grid)
-library(gtable)
-library(kableExtra)
-library(snakecase)
-```
 
 
 ```{r power analysis, include=FALSE}
@@ -55,11 +30,20 @@ for(sim in 1:1000) {
     
     # Store Pvalue from the T.Test
     t_test_p_values[sim] <-  test_result$p.value
-  }
+}
+
+plot10 <- data.frame(p = t_test_p_values) %>%
+  ggplot(aes(x= p)) + 
+  geom_histogram(bins = 20) + 
+  labs(x= "", y = "Frequency") +
+  theme_minimal() + 
+  scale_y_continuous(limit = c(0,1000)) +
+  ggtitle("A")
 
 # Find our power. Find P-value less than .05
 reject_null_count<- sum(t_test_p_values<= 0.05)
 
+# plot for 10%
 power_value_10 <- reject_null_count/1000*100
 power_value_10
 
@@ -91,7 +75,16 @@ for(sim in 1:1000) {
     
     # Store Pvalue from the T.Test
     t_test_p_values[sim] <-  test_result$p.value
-  }
+}
+
+#plot for 15
+plot15 <- data.frame(p = t_test_p_values) %>%
+  ggplot(aes(x= p)) + 
+  geom_histogram(bins = 20) +
+  labs(x= "", y = "") +
+  theme_minimal() + 
+  scale_y_continuous(limit = c(0,1000)) +
+  ggtitle("B")
 
 # Find our power. Find P-value less than .05
 reject_null_count<- sum(t_test_p_values<= 0.05)
@@ -129,7 +122,16 @@ for(sim in 1:1000) {
     
     # Store Pvalue from the T.Test
     t_test_p_values[sim] <-  test_result$p.value
-  }
+}
+
+#plot of 25%
+plot25 <- data.frame(p = t_test_p_values) %>%
+  ggplot(aes(x= p)) + 
+  geom_histogram(bins = 20) +
+  labs(x= "", y = "") +
+  theme_minimal() + 
+  scale_y_continuous(limit = c(0,1000)) +
+  ggtitle("C")
 
 # Find our power. Find P-value less than .05
 reject_null_count<- sum(t_test_p_values<= 0.05)
@@ -143,10 +145,9 @@ power_value_25
 ```{r load draft data}
 d <- fread('./Datasci241 Experiment result - Combined.csv')
 
-head(d)
 ```
 
-```{r data cleaning, include=FALSE}
+```{r datacleaning, include=FALSE}
 # Combine treatment categories to one column
 # d[, emoji := ifelse(non_facial_emoji == 1, "Non-Facial",
 #                ifelse(facial_emoji == 1, "Facial",
@@ -161,8 +162,6 @@ d[, emoji := fcase(
 # Drop unused column 
 d[, c("non_facial_emoji", "facial_emoji", "no_emoji", "seller_name", "counter", "response time", "condition", 
       "price", "V18", "Rough Numbers", "V20" , "V21") := NULL]
-
-
 
 # Normalize all day values. 
 d[day == "Fri", day := "Friday"]
@@ -188,14 +187,17 @@ d[, dayType := ifelse(day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")]
 d[, number := .I]
 
 
-# reorder so relevant rows are closer together
+# reorder so relevant cols are closer together
 d <- d[, c(12, 1:3, 11, 4:10)]
 
+# convert snakecase
 setnames(d, to_lower_camel_case(names(d)))
 
-head(d)
-colSums(is.na(d))
+showcase_data <- kable(head(d, 3)[,c(4:11)], caption = "Snippet of Data", 
+                       booktabs = TRUE) %>%
+  kable_styling(latex_options = "HOLD_position")
 
+colSums(is.na(d))
 ```  
 
 
@@ -235,8 +237,7 @@ response_tbl <- d %>%
       emoji = "Emoji Treatment"
     ),
     type = list(msgTime ~ "continuous")
-  ) %>%
-  modify_caption("**Response from Seller Summary Table**") 
+  )
 
 combined_tbl <- tbl_merge(list(response_tbl, price_red_tbl), tab_spanner = c("Responses to Messages", "Price Reduction Willingness"))
 ```
@@ -432,7 +433,7 @@ tbl_model_response_1 <-
     caption = NULL
     ) %>%
   bold_p() %>%
-  modify_caption("Model 1 with Robust SE") 
+  modify_caption("(Simple) Model 1 for Responses with Robust SE") 
 
 tbl_model_response_1 
 
@@ -456,7 +457,7 @@ tbl_model_response_2 <-
     label = list(emoji = "Emoji Treatment", 
                  sellerGender = "Gender of Seller")) %>%
   bold_p() %>%
-  modify_caption("Model 2 with Robust SE") 
+  modify_caption("(Middle) Model 2 for Responses with Robust SE") 
 tbl_model_response_2
 
 ```  
@@ -488,7 +489,7 @@ tbl_model_response_3 <-
                  justListed = "Just Listed")
     ) %>%
   bold_p() %>%
-  modify_caption("Model 3 with Robust SE")
+  modify_caption("(Saturated) Model 3 for Responses with Robust SE")
 tbl_model_response_3
 
 ```  
@@ -610,7 +611,7 @@ tbl_model1 <-
     caption = NULL
     ) %>%
   bold_p() %>%
-  modify_caption("Model 1 with Robust SE") 
+  modify_caption("(Simple) Model 1 for Willingness to Reduce with Robust SE") 
 
 tbl_model1 
 
@@ -636,7 +637,7 @@ tbl_model2 <-
     label = list(emoji = "Emoji Treatment", 
                  sellerGender = "Gender of Seller")) %>%
   bold_p() %>%
-  modify_caption("Model 2 with Robust SE") 
+  modify_caption("(Middle) Model 2 for Willingness to Reduce with Robust SE") 
 tbl_model2
 
 ```  
@@ -668,7 +669,7 @@ tbl_model3 <-
                  justListed = "Just Listed")
     ) %>%
   bold_p() %>%
-  modify_caption("Model 3 with Robust SE") 
+  modify_caption("(Saturated) Model 3 for Willingness to Reduce with Robust SE") 
 tbl_model3
 
 ```  
