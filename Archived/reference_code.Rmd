@@ -1,0 +1,849 @@
+---
+title: "reference_code"
+output: html_document
+date: "2025-04-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(data.table)
+library(sandwich)
+library(lmtest)
+library(AER) 
+library(ggplot2) 
+library(patchwork)
+library(gtsummary)
+library(chron)
+library(kableExtra)
+library(ggpubr)
+library(magrittr)
+library(dplyr)
+library(tidyverse)
+library(knitr)
+library(stargazer)
+library(xtable)
+library(scales)
+library(e1071)
+library(gt)
+library(gridExtra)
+library(grid)
+library(gtable)
+library(janitor)
+library(latex2exp)
+library(snakecase)
+```
+
+# Abstract
+
+
+# Introduction and Purpose
+
+
+# Literature Review 
+
+
+# Power Analysis
+
+```{r power analysis}
+# Calculate Power Value if 10% difference between treatment and control with 100 samples each. 
+
+# Generate control values with 75% 0s (FB No Response) and 25% 1s (FB Response)
+d1 <- data.table(treatment = rep(0, 500))
+d1[, response := c(rep(0, 375), rep(1, 125))]
+
+# Generate treatment values with 65% 0s and 35% 1s. Our treatment has a 10% increase in FB response than the control. 
+d2 <- data.table(treatment = rep(1, 500))
+d2[ , response := c(rep(0, 325), rep(1, 175))]
+
+# Concatenate row-wise
+data <- rbind(d1, d2)
+
+# Check the average treatment effect (ATE)
+ate <- mean(data$response[data$treatment == 1]) - mean(data$response[data$treatment == 0])
+ate
+
+# fill this in with the p-values from your power analysis
+t_test_p_values <- rep(NA, 1000) 
+
+for(sim in 1:1000) { 
+    # Resample and randomly selects 100 treatment and 100 control without replacement
+    sample <- data[, .SD[sample(.N, 120)], by = treatment] 
+
+    # Run the t-test
+   test_result <- t.test(response~treatment, data=sample)
+    
+    # Store Pvalue from the T.Test
+    t_test_p_values[sim] <-  test_result$p.value
+  }
+
+# Find our power. Find P-value less than .05
+reject_null_count<- sum(t_test_p_values<= 0.05)
+
+power_value_10 <- reject_null_count/1000*100
+power_value_10
+
+
+# Generate control values with 75% 0s (FB No Response) and 25% 1s (FB Response)
+d1 <- data.table(treatment = rep(0, 500))
+d1[, response := c(rep(0, 375), rep(1, 125))]
+
+# Generate treatment values with 60% 0s and 40% 1s. Our treatment has a 10% increase in FB response than the control. 
+d2 <- data.table(treatment = rep(1, 500))
+d2[ , response := c(rep(0, 300), rep(1, 200))]
+
+# Concatenate row-wise
+data <- rbind(d1, d2)
+
+# Check the average treatment effect (ATE)
+ate <- mean(data$response[data$treatment == 1]) - mean(data$response[data$treatment == 0])
+ate
+
+# fill this in with the p-values from your power analysis
+t_test_p_values <- rep(NA, 1000) 
+
+for(sim in 1:1000) { 
+    # Resample and randomly selects 100 treatment and 100 control without replacement
+    sample <- data[, .SD[sample(.N, 120)], by = treatment] 
+
+    # Run the t-test
+   test_result <- t.test(response~treatment, data=sample)
+    
+    # Store Pvalue from the T.Test
+    t_test_p_values[sim] <-  test_result$p.value
+  }
+
+# Find our power. Find P-value less than .05
+reject_null_count<- sum(t_test_p_values<= 0.05)
+
+power_value_15 <- reject_null_count/1000*100
+power_value_15
+
+
+# Calculate Power Value if 25% difference between treatment and control with 100 samples each. 
+
+# Generate control values with 75% 0s (FB No Response) and 25% 1s (FB Response)
+d1 <- data.table(treatment = rep(0, 500))
+d1[, response := c(rep(0, 375), rep(1, 125))]
+
+# Generate treatment values with 50% 0s and 50% 1s. Our treatment has a 10% increase in FB response than the control. 
+d2 <- data.table(treatment = rep(1, 500))
+d2[ , response := c(rep(0, 250), rep(1, 250))]
+
+# Concatenate row-wise
+data <- rbind(d1, d2)
+
+# Check the average treatment effect (ATE)
+ate <- mean(data$response[data$treatment == 1]) - mean(data$response[data$treatment == 0])
+ate
+
+# fill this in with the p-values from your power analysis
+t_test_p_values <- rep(NA, 1000) 
+
+for(sim in 1:1000) { 
+    # Resample and randomly selects 100 treatment and 100 control without replacement
+    sample <- data[, .SD[sample(.N, 120)], by = treatment] 
+
+    # Run the t-test
+   test_result <- t.test(response~treatment, data=sample)
+    
+    # Store Pvalue from the T.Test
+    t_test_p_values[sim] <-  test_result$p.value
+  }
+
+# Find our power. Find P-value less than .05
+reject_null_count<- sum(t_test_p_values<= 0.05)
+
+power_value_25 <- reject_null_count/1000*100
+power_value_25
+
+```
+With 120 sample in test and 120 sample in control, we would detect an ATE of 10% difference only `r power_value_10`% of the time and an ATE of 25% difference `r power_value_25`% of the time. Based on pilot and our approximate intended sample size of 120 we would detect a true statistically significant result of a 15% ATE `r power_value_15`% of the time. 
+
+# Hypothesis
+
+Null Hypothesis $H_0$: Either emoji treatment has no direct impact on willingness to sell or message response rate:
+$$H_0: \beta_{FE} \ = \ 0 \ \ or \ \ \beta_{NFE} = 0$$
+
+Alternative Hypothesis $H_1$: Either of the treatments has an effect on the willingness to sell or message response rate:
+$$H_1: \beta_{FE} \ \not= \ 0 \ \ or \ \ \beta_{NFE} \not= 0$$
+
+# Methods/Modeling
+
+
+## Data Cleaning
+```{r load draft data}
+d <- fread('./Datasci241 Experiment result - Combined.csv')
+
+head(d)
+```
+
+```{r data cleaning, include=TRUE}
+# Combine treatment categories to one column
+# d[, emoji := ifelse(non_facial_emoji == 1, "Non-Facial",
+#                ifelse(facial_emoji == 1, "Facial",
+#                ifelse(no_emoji == 1, "Control", NA_character_)))]
+# simplified code
+d[, emoji := fcase(
+  non_facial_emoji == 1, "Non-Facial",
+  facial_emoji == 1, "Facial",
+  no_emoji == 1, "Control"
+)]
+
+# Drop unused column 
+d[, c("non_facial_emoji", "facial_emoji", "no_emoji", "seller_name", "counter", "response time", "condition", 
+      "price", "V18", "Rough Numbers", "V20" , "V21") := NULL]
+
+
+
+# Normalize all day values. 
+d[day == "Fri", day := "Friday"]
+d[day == "Mon", day := "Monday"]
+d[day == "Sat", day := "Saturday"]
+d[day == "Thu", day := "Thursday"]
+d[day == "Tue", day := "Tuesday"]
+
+# refactoring for easier interpretability
+d[, day := factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))]
+d[, seller_gender := factor(seller_gender, levels = c("M", "F"), labels = c("M", "F"))] #use male as reference because there are more males, maybe?
+d[, emoji := factor(emoji, levels = c("Control", "Non-Facial", "Facial"))]
+
+
+# Convert to ITime using data.table's built-in function:
+d[, msg_time := as.ITime(msg_time, format = "%H:%M:%S")]
+
+
+# create weekend/weekday 
+d[, dayType := ifelse(day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")]
+
+# create number col
+d[, number := .I]
+
+
+# reorder so relevant rows are closer together
+d <- d[, c(12, 1:3, 11, 4:10)]
+
+setnames(d, to_lower_camel_case(names(d)))
+
+head(d)
+colSums(is.na(d))
+
+```  
+## Data Exploration
+
+
+```{r gen summaries for reference, include=TRUE}
+# willingness to reduce price table
+price_red_tbl <- d %>%
+  select(-location, -response, -number) %>%
+  tbl_summary(
+    by = willingToReducePrice,
+    label = list(
+      buyer = "Prospective Buyer",
+      msgTime = "Hour of Message",
+      day = "Day of Message",
+      dayType = "Day Type",
+      priceDrop = "Price Drop",
+      justListed = "Just Listed",
+      sellerGender = "Gender of Seller",
+      emoji = "Emoji Treatment"
+    ),
+    type = list(msgTime ~ "continuous")
+  ) %>%
+  modify_caption("**Willingness for Seller Reduce Price Summary Table**") 
+
+# response table
+response_tbl <- d %>%
+  select(-location, - willingToReducePrice, -number) %>%
+  tbl_summary(
+    by = response,
+    label = list(
+      buyer = "Prospective Buyer",
+      msgTime = "Hour of Message",
+      day = "Day of Message",
+      dayType = "Day Type",
+      priceDrop = "Price Drop",
+      justListed = "Just Listed",
+      sellerGender = "Gender of Seller",
+      emoji = "Emoji Treatment"
+    ),
+    type = list(msgTime ~ "continuous")
+  ) %>%
+  modify_caption("**Response from Seller Summary Table**") 
+
+combined_tbl <- tbl_merge(list(response_tbl, price_red_tbl), tab_spanner = c("Responses to Messages", "Price Reduction Willingness"))
+```
+
+
+```{r, include=TRUE, fig.pos= "H"}
+response_tbl 
+```
+
+
+```{r , include=TRUE, fig.pos = "H"}
+price_red_tbl 
+```
+
+### Plots
+
+```{r data exploration, include=TRUE}
+#faceted bar plots for all variables relative to balance within treatment groups 
+# now will exclude msgTime as tricky to summarize as a bar plot
+faceted_cols <- d %>%
+  select(-location, -number, -emoji, -msgTime) %>%
+  names()
+
+#faceted cols 
+for (var in faceted_cols) {
+  var_clean <- gsub("_", "", var)
+  
+  p <- ggplot(d, aes(x = emoji, fill= emoji)) +
+    geom_bar() +
+    facet_wrap(as.formula(paste0("~", var))) +
+    labs(
+      title = paste("Emoji Treatment by", var),
+      x = "", 
+      y = "Count"
+    ) +
+    theme_minimal() +
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          legend.position = "none")
+  
+  assign(paste0("plot", var_clean), p)
+}
+
+# rework msgTime plot provide from kevin to show msgTime per emoji treatment
+plotmsgTime <- ggplot(d, aes(x = as.numeric(msgTime), fill = emoji)) +
+  geom_histogram(binwidth = 3600, alpha = 0.4, boundary = 0, closed = "left") +
+  scale_x_continuous(
+    breaks = seq(0, 24 * 3600, by = 3600),
+    labels = function(x) format(as.ITime(x), "%H:%M"),
+    expand = expansion(add = 0)
+  ) +
+  labs(
+    title = "Distribution of Message Times by Emoji Treatment",
+    x = "Time of Day (Hours)",
+    y = "Count",
+    fill = "Emoji Treatment"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
+  )
+
+# Bar plot of seller gender
+gender_plot<- ggplot(d, aes(x = sellerGender)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Seller Gender",
+    x = "Seller Gender",
+    y = "Count"
+  )
+
+
+# Bar plot of day 
+day_plot <- ggplot(d, aes(x = willingToReducePrice)) +
+  geom_bar() +
+  labs(
+    title = "Willingess to Reduce Price",
+    x = "Seller's Response",
+    y = "Count"
+  )
+
+
+# Bar plot of Response
+response_plot <- ggplot(d, aes(x = day)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Day Message Sent",
+    x = "Day",
+    y = "Count"
+  )
+
+
+# Bar plot of location
+loc_plot <- ggplot(d, aes(x = location)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Location",
+    x = "Location",
+    y = "Count"
+  )
+
+
+#Histogram of time message was sent
+#adjusted original off-centering
+time_plot <- ggplot(d, aes(x = as.numeric(msgTime))) +
+  geom_histogram(binwidth = 3600, boundary = 0, closed = "left") +
+  scale_x_continuous(
+    breaks = seq(0, 24 * 3600, by = 3600),
+    labels = function(x) format(as.ITime(x), "%H:%M"),
+    expand = expansion(add = 0)
+  ) +
+  labs(
+    title = "Distribution of Message Times",
+    x = "Time of Day (Hours)",
+    y = "Count"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
+  )
+
+
+gender_plot
+day_plot
+response_plot
+loc_plot
+time_plot
+
+plotbuyer
+plotday
+plotdayType
+plotpriceDrop
+plotresponse
+plotsellerGender
+plotwillingToReducePrice
+plotmsgTime
+
+``` 
+
+### Combined Plots for a visual confirmation of even dist by treatments
+
+Just for a practical understanding of the plots
+
+
+```{r , include=TRUE, fig.width=40, fig.height=30}
+combinedplots <- 
+  (plotbuyer | plotdayType | plotpriceDrop) /
+  (plotsellerGender | plotday) /
+  (plotmsgTime)
+  
+
+```
+
+
+```{r, include=TRUE, fig.width=40, fig.height=30}
+combinedplots 
+```
+
+
+
+```{r, include=TRUE, results='asis'}
+
+# # landscape mode
+# ls_combinedplots <- paste0(
+#   "\\begin{landscape}\n",
+#   combinedplots,
+#   "\n\\end{landscape}"
+# )
+# 
+# # display
+# cat(ls_combinedplots)
+```
+
+
+### Model for Response
+
+```{r, include=TRUE}
+model_response_1 <- d[ , lm(response~ emoji)]
+
+#showing robust output to compare against tidy model_response_ output
+
+# robust se
+model_response_1_robust <- coeftest(model_response_1, vcov = vcovHC(model_response_1, "HC1"))
+model_response_1_robust
+
+# output table with robust se
+tbl_model_response_1 <- 
+  tbl_regression(
+    model_response_1,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_response_1, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment"),
+    caption = NULL
+    ) %>%
+  bold_p() %>%
+  modify_caption("Model 1 with Robust SE") 
+
+tbl_model_response_1 
+
+
+
+```  
+
+```{r, include=TRUE}
+model_response_2 <- d[ , lm(response~ emoji + sellerGender )]
+
+# if you want to compare to check robust std
+# model_response_2_robust <- coeftest(model_response_2, vcov = vcovHC(model_response_2, "HC1"))
+# model_response_2_robust
+
+#output tbl with robust se
+tbl_model_response_2 <- 
+  tbl_regression(
+    model_response_2,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_response_2, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller")) %>%
+  bold_p() %>%
+  modify_caption("Model 2 with Robust SE") 
+tbl_model_response_2
+
+```  
+
+```{r , include=TRUE}
+model_response_3 <- d[ , lm(response~emoji + 
+                    buyer + msgTime + day + priceDrop + 
+                    justListed + sellerGender)]
+
+
+# if you want to compare to check robust std
+# model_response_3_robust <- coeftest(model_response_3, vcov = vcovHC(model_response_3, "HC1"))
+# model_response_3_robust
+
+#output table with robust se
+tbl_model_response_3 <- 
+  tbl_regression(
+    model_response_3,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_response_3, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 day = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed")
+    ) %>%
+  bold_p() %>%
+  modify_caption("Model 3 with Robust SE")
+tbl_model_response_3
+
+```  
+
+```{r  response check covariate randomeness and collinearity , include=TRUE}
+# Checking for randomness in covariate
+# Do a F-test  to compare full model_response_ to model_response_ with no predictive features
+null_model_response <- lm(response ~ 1, data = d)
+full_model_response <- lm(response ~ 1+ emoji + buyer + msgTime + day + 
+                   priceDrop + justListed + sellerGender, data = d)
+
+# Perform an F-test
+anova_mod_response <- anova(null_model_response, full_model_response, test = 'F')
+anova_mod_response
+
+# Check for multicollinearty
+vif_values_response <- vif(full_model_response)
+vif_values_response
+
+```  
+
+### All Response Models Combined
+
+
+```{r, include=TRUE}
+
+combined_response_tbl<- tbl_merge(list(tbl_model_response_1, tbl_model_response_2, tbl_model_response_3), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated**")) %>% 
+  modify_caption("All Response Models") 
+
+combined_response_tbl
+  # as_gt() %>%
+  # as_latex()
+
+# # landscape mode
+# ls_combined_response_tbl <- paste0(
+#   "\\begin{landscape}\n",
+#   combined_response_tbl,
+#   "\n\\end{landscape}"
+# )
+# 
+# # display
+# cat(ls_combined_response_tbl)
+
+# commented out portion does not work in html output
+```
+
+
+### Recoded Days as Weekend vs Weekday for Response Fully Saturated Model
+
+```{r, include = TRUE, results='asis'}
+model_response_3_recoded <- d[ , lm(response~emoji + 
+                    buyer + msgTime + dayType + priceDrop + 
+                    justListed + sellerGender)]
+
+
+# if you want to compare to check robust std
+# model_response_3_robust_recoded <- coeftest(model_response_3_recoded, 
+#                                             vcov = vcovHC(model_response_3_recoded, "HC1"))
+# model_response_3_robust_recoded
+
+#output table with robust se
+tbl_model_response_3_recoded <- 
+  tbl_regression(
+    model_response_3_recoded,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_response_3_recoded, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 dayType = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed")
+    ) %>%
+  bold_p() %>%
+  modify_caption("Model 3 Recoded Weekend/Weekday with Robust SE")
+
+combined_response_tbl_recoded<- tbl_merge(list(tbl_model_response_1, tbl_model_response_2, tbl_model_response_3_recoded), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated Recoded**")) %>% 
+  modify_caption("All Response Models with Recoded Weekday/Weekend") 
+
+combined_response_tbl_recoded
+#   as_gt() %>%
+#   as_latex()
+# 
+# # landscape mode
+# ls_combined_response_tbl_recoded <- paste0(
+#   "\\begin{landscape}\n",
+#   combined_response_tbl_recoded,
+#   "\n\\end{landscape}"
+# )
+# 
+# # display
+# cat(ls_combined_response_tbl_recoded)
+
+# commented out portion does not work in html
+
+
+```
+
+```
+
+### Models for Willingness to Reduce Price 
+
+```{r, include=TRUE}
+model1 <- d[ , lm(willingToReducePrice~  emoji)]
+
+#showing robust output to compare against tidy model output
+
+# robust se
+#model1_robust <- coeftest(model1, vcov = vcovHC(model1, "HC1"))
+#model1_robust
+
+# output table with robust se
+tbl_model1 <- 
+tbl_regression(
+    model1,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model1, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment"),
+    caption = NULL
+    ) %>%
+  bold_p() %>%
+  modify_caption("Model 1 with Robust SE") 
+
+tbl_model1 
+
+
+
+```  
+
+```{r, include=TRUE}
+model2 <- d[ , lm(willingToReducePrice~ emoji + sellerGender )]
+
+# if you want to compare to check robust std
+# model2_robust <- coeftest(model2, vcov = vcovHC(model2, "HC1"))
+# model2_robust
+
+#output tbl with robust se
+tbl_model2 <- 
+  tbl_regression(
+    model2,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model2, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller")) %>%
+  bold_p() %>%
+  modify_caption("Model 2 with Robust SE") 
+tbl_model2
+
+```  
+
+```{r , include=TRUE}
+model3 <- d[ , lm(willingToReducePrice~emoji + 
+                    buyer + msgTime + day + priceDrop + 
+                    justListed + sellerGender)]
+
+
+# if you want to compare to check robust std
+# model3_robust <- coeftest(model3, vcov = vcovHC(model3, "HC1"))
+# model3_robust
+
+#output table with robust se
+tbl_model3 <- 
+  tbl_regression(
+    model3,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model3, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 day = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed")
+    ) %>%
+  bold_p() %>%
+  modify_caption("Model 3 with Robust SE") 
+tbl_model3
+
+```  
+
+```{r check covariate randomeness and collinearity , include=TRUE}
+# Checking for randomness in covariate
+# Do a F-test  to compare full model to model with no predictive features
+null_model <- lm(willingToReducePrice ~ 1, data = d)
+full_model <- lm(willingToReducePrice ~ 1+ emoji + buyer + msgTime + day + 
+                   priceDrop + justListed + sellerGender, data = d)
+
+# Perform an F-test
+anova_mod <- anova(null_model, full_model, test = 'F')
+anova_mod
+
+# Check for multicollinearty
+vif_values <- vif(full_model)
+vif_values
+
+```  
+
+### All Willingness to Reduce Price Models Combined
+
+```{r, include=TRUE}
+
+combined_willingness_tbl<- tbl_merge(list(tbl_model1, tbl_model2, tbl_model3), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated**")) %>% 
+  modify_caption("All Willingness to Reduce Price Models") 
+  
+  combined_willingness_tbl
+#  as_gt() %>%
+#  as_latex()
+
+# landscape mode
+#ls_combined_willingness_tbl <- paste0(
+#  "\\begin{landscape}\n",
+#  combined_willingness_tbl,
+#  "\n\\end{landscape}"
+#)
+
+# display
+#cat(ls_combined_willingness_tbl)
+
+
+```
+
+### Recoded Days as Weekend vs Weekday for Willigness Fully Saturated Model
+
+```{r, include = TRUE}
+model3_recoded <- d[ , lm(willingToReducePrice~emoji + 
+                    buyer + msgTime + dayType + priceDrop + 
+                    justListed + sellerGender)]
+
+
+# if you want to compare to check robust std
+# model3_robust_recoded <- coeftest(model3_recoded, 
+#                                             vcov = vcovHC(model3_recoded, "HC1"))
+# model3_robust_recoded
+
+#output table with robust se
+tbl_model3_recoded <- 
+  tbl_regression(
+    model3_recoded,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model3_recoded, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 dayType = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed")
+    ) %>%
+  bold_p() %>%
+  modify_caption("Model 3 Recoded Weekend/Weekday with Robust SE")
+
+combined_willingness_tbl_recoded<- tbl_merge(list(tbl_model_response_1, tbl_model_response_2, tbl_model3_recoded), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated Recoded**")) %>% 
+  modify_caption("All Willingness Models with Recoded Weekday/Weekend")
+  
+combined_willingness_tbl_recoded
+#  as_gt() %>%
+#  as_latex()
+
+# landscape mode
+#ls_combined_willingness_tbl_recoded <- paste0(
+#  "\\begin{landscape}\n",
+#  combined_willingness_tbl_recoded,
+#  "\n\\end{landscape}"
+#)
+
+# display
+#cat(ls_combined_willingness_tbl_recoded)
+
+
+```
+
+### Subexamination of Gender 
+
+```{r gender specific subanalysis, include=TRUE}
+# # Filter the data.table for only male sellers
+# d_male <- d[sellerGender == "M"]
+# # Filter the data.table for only female sellers
+# d_female <- d[sellerGender == "F"]
+
+
+#nice part about data.table can do rowwise filtering without creating new tables
+model_male <- d[sellerGender == "M"
+                       , lm(willingToReducePrice ~ emoji + buyer + msgTime + 
+                              day + priceDrop + justListed )]
+
+model_female <- d[sellerGender == "F", 
+                  lm(willingToReducePrice ~ emoji + buyer + msgTime + 
+                       day + priceDrop + justListed )]
+
+coeftest(model_male, vcov = vcovHC(model_male, type = "HC1"))
+coeftest(model_female,  vcov = vcovHC(model_female, type = "HC1"))
+
+```  
+
+# Results
+
+
+# Discussion
+
+
+
+# Conclusions
+
+
+
+
+
+
+
+
+
