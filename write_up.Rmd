@@ -187,11 +187,134 @@ tbl_model1 %>%
     tab_options(latex.tbl.pos = "H")
 ```
 
+```{r, include=TRUE, echo=TRUE, eval=FALSE}
+# Sample code for Model 3 of Willingness to Reduce 
+# saturated model 
+model3 <- d[ , lm(willingToReducePrice~emoji + 
+                    buyer + msgTime + day + priceDrop + 
+                    justListed + sellerGender)]
+
+
+# if you want to compare to check robust std
+# model3_robust <- coeftest(model3, vcov = vcovHC(model3, "HC1"))
+# model3_robust
+
+#output table with robust se
+tbl_model3 <- 
+  tbl_regression(
+    model3,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model3, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 day = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed")
+    ) %>%
+  bold_p() %>%
+  modify_caption("(Saturated) Model 3 for Willingness to Reduce with Robust SE") 
+
+
+```
+
+```{r, include=TRUE, results='asis'}
+# display combined table 
+cat(ls_combined_willingness_tbl)
+
+```
+
+
 # Discussion
 
 The findings of this study provide preliminary experimental evidence that the use of complementary non-face emojis in messages can influence seller engagement on Facebook Marketplace. Sellers were significantly more likely to respond to messages containing non-face emojis compared to those without emojis. This supports existing theories that emojis, when used effectively, can enhance communication by adding emotional tone and capturing attention in a visually crowded digital space.
 The use of facial emojis, while slightly increasing response rates compared to the control, did not yield statistically significant differences. This suggests that not all emojis function the same way in transactional contexts. The distinction made in prior literature between substituting versus complementary emoji use is supported here, as complementary emojis appear to boost engagement without impairing processing fluency.
 Although the observed increase in willingness to reduce price was not statistically significant, the upward trend in the non-face emoji group suggests that emoji use may influence not just whether sellers respond, but how they respond. This highlights the potential for subtle, low-cost communication strategies to influence outcomes in peer-to-peer marketplaces.
+
+```{r, include=TRUE, echo=TRUE, eval=FALSE}
+#gender specific subanalysis
+#data.table can do rowwise filtering without creating new tables
+model_male <- d[sellerGender == "M"
+                       , lm(willingToReducePrice ~ emoji + buyer + msgTime + 
+                              day + priceDrop + justListed )]
+
+model_female <- d[sellerGender == "F", 
+                  lm(willingToReducePrice ~ emoji + buyer + msgTime + 
+                       day + priceDrop + justListed )]
+
+#robust SE for genders
+male_robust <- coeftest(model_male, vcov = vcovHC(model_male, type = "HC1"))
+female_robust <- coeftest(model_female,  vcov = vcovHC(model_female, type = "HC1"))
+
+
+#male table
+tbl_male <- 
+  tbl_regression(
+    model_male,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_male, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 day = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed"),
+    caption = NULL
+    ) %>%
+  bold_p() %>%
+  modify_caption("Male Specific Model") 
+
+#female table
+tbl_female <- 
+  tbl_regression(
+    model_female,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_female, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 day = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed"),
+    caption = NULL
+    ) %>%
+  bold_p() %>%
+  modify_caption("Female Specific Model") 
+
+#combined gender table
+combined_gender<- tbl_merge(list(tbl_female, tbl_male),
+                                  tab_spanner = c("$Model_1$ : **Female**", 
+                                                  "$Model_2$ : **Male**")) %>% 
+  modify_caption("Combined Gender Model Table") %>%
+  as_gt() %>%
+  tab_options(latex.tbl.pos = "H") %>%
+  as_latex()
+
+```  
+
+```{r, include=TRUE, results='asis'}
+cat(combined_gender)
+```
+
+```{r, include=TRUE, echo=TRUE}
+# Checking for randomness in covariate
+# Do a F-test  to compare full model to model with no predictive features
+null_model <- lm(willingToReducePrice ~ 1, data = d)
+full_model <- lm(willingToReducePrice ~ 1+ emoji + buyer + msgTime + day + 
+                   priceDrop + justListed + sellerGender, data = d)
+
+# Perform an F-test
+anova_mod <- anova(null_model, full_model, test = 'F')
+anova_mod
+
+# Check for multicollinearty
+vif_values <- vif(full_model)
+vif_values
+```
+
 
 # Conclusions
 

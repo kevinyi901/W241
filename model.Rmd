@@ -505,9 +505,33 @@ full_model_response <- lm(response ~ 1+ emoji + buyer + msgTime + day +
 anova_mod_response <- anova(null_model_response, full_model_response, test = 'F')
 anova_mod_response
 
+#anova table 
+anova_tbl <- broom::tidy(anova_mod_response)
+
+anova_tbl <- anova_tbl %>%
+  gt() %>%
+  tab_header(
+    title = "ANOVA table"
+  ) %>%
+  fmt_number(columns = where(is.numeric), decimals =3)
+
 # Check for multicollinearty
 vif_values_response <- vif(full_model_response)
 vif_values_response
+
+# vif table
+vif_tbl <- tibble(
+  Term = names(vif_values_response),
+  VIF = as.numeric(vif_values_response)
+)
+
+# Style with gt
+vif_tbl <- vif_tbl %>%
+  gt() %>%
+  tab_header(
+    title = "Variance Inflation Factors"
+  ) %>%
+  fmt_number(columns = vars(VIF), decimals = 2)
 
 ```  
 
@@ -689,6 +713,29 @@ anova_mod
 vif_values <- vif(full_model)
 vif_values
 
+#anova table 
+anova_willing_tbl <- broom::tidy(anova_mod)
+
+anova_tbl <- anova_willing_tbl %>%
+  gt() %>%
+  tab_header(
+    title = "ANOVA table for Willingness to Reduce Price"
+  ) %>%
+  fmt_number(columns = where(is.numeric), decimals =3)
+
+# vif table
+vif_willing_tbl <- tibble(
+  Term = names(vif_values),
+  VIF = as.numeric(vif_values)
+)
+
+# Style with gt
+vif_willing_tbl <- vif_willing_tbl %>%
+  gt() %>%
+  tab_header(
+    title = "Covariance Balance for Willingness to Reduce Price"
+  ) %>%
+  fmt_number(columns = vars(VIF), decimals = 2)
 ```  
 
 
@@ -769,7 +816,9 @@ cat(ls_combined_willingness_tbl_recoded)
 ```
 
 
-```{r gender specific subanalysis, include=FALSE}
+```{r, include=FALSE}
+#-----------GENDER SPECIFIC SUBANALYSIS----------------
+
 # # Filter the data.table for only male sellers
 # d_male <- d[sellerGender == "M"]
 # # Filter the data.table for only female sellers
@@ -785,10 +834,60 @@ model_female <- d[sellerGender == "F",
                   lm(willingToReducePrice ~ emoji + buyer + msgTime + 
                        day + priceDrop + justListed )]
 
-coeftest(model_male, vcov = vcovHC(model_male, type = "HC1"))
-coeftest(model_female,  vcov = vcovHC(model_female, type = "HC1"))
+#robust SE for genders
+male_robust <- coeftest(model_male, vcov = vcovHC(model_male, type = "HC1"))
+female_robust <- coeftest(model_female,  vcov = vcovHC(model_female, type = "HC1"))
+
+
+#male table
+tbl_male <- 
+  tbl_regression(
+    model_male,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_male, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 day = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed"),
+    caption = NULL
+    ) %>%
+  bold_p() %>%
+  modify_caption("Male Specific Model") 
+
+#female table
+tbl_female <- 
+  tbl_regression(
+    model_female,
+    pvalue_fun = label_style_pvalue(digits = 2),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = vcovHC(model_female, "HC1"), ...),
+    label = list(emoji = "Emoji Treatment", 
+                 sellerGender = "Gender of Seller",
+                 buyer = "Prospective Buyer",
+                 msgTime = "Hour of Message",
+                 day = "Day of Message",
+                 priceDrop = "Price Drop",
+                 justListed = "Just Listed"),
+    caption = NULL
+    ) %>%
+  bold_p() %>%
+  modify_caption("Female Specific Model") 
+
+#combined gender table
+combined_gender<- tbl_merge(list(tbl_female, tbl_male),
+                                  tab_spanner = c("$Model_1$ : **Female**", 
+                                                  "$Model_2$ : **Male**")) %>% 
+  modify_caption("Combined Gender Model Table") %>%
+  as_gt() %>%
+  tab_options(latex.tbl.pos = "H") %>%
+  as_latex()
 
 ```  
+
+
+
 
 
 
