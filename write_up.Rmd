@@ -225,6 +225,11 @@ cat(ls_combined_willingness_tbl)
 
 ```
 
+```{r, include=TRUE, results='asis'}
+# display recoded table
+cat(ls_combined_willingness_tbl_recoded)
+```
+
 
 # Discussion
 

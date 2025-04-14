@@ -794,7 +794,7 @@ tbl_model3_recoded <-
   bold_p() %>%
   modify_caption("Model 3 Recoded Weekend/Weekday with Robust SE")
 
-combined_willingness_tbl_recoded<- tbl_merge(list(tbl_model_response_1, tbl_model_response_2, tbl_model3_recoded), 
+combined_willingness_tbl_recoded<- tbl_merge(list(tbl_model1, tbl_model2, tbl_model3_recoded), 
                                   tab_spanner = c("$Model_1$ : **Base**", 
                                                   "$Model_2$ : **Middle**", 
                                                   "$Model_3$ : **Saturated Recoded**")) %>% 

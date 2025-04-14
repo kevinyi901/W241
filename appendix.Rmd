@@ -15,4 +15,15 @@ combined_tbl_reformat <- paste0(
 
 # display
 cat(combined_tbl_reformat)
+
 ```
+
+```{r, include =TRUE, results = 'asis'}
+cat(ls_combined_response_tbl)
+
+```
+
+```{r, include =TRUE, results = 'asis'}
+cat(ls_combined_response_tbl_recoded)
+```
+
