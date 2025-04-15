@@ -1,20 +1,24 @@
 # Introduction
 
-Emojis are a common way of expressing emotion in modern forms of virtual communication. They are used in a wide variety of contexts to convey different feelings and can significantly change the tone and meaning of the message they are attached to. The purpose of this study is to determine if the usage of emojis has an impact on seller behaviors on Facebook Marketplace, specifically their willingness to reduce an item's price. In our test, we randomly sent treatment messages, with and without emojis, to sellers who have listed headphones on the platform. The response rate of each condition was then calculated, along with the percentage of sellers who were willing to reduce their initial price in each group.
+Emojis are a common way of expressing emotion in modern forms of virtual communication. They are used in a wide variety of contexts to convey different feelings and can significantly change the tone and meaning of the message. Previous research has already expressed the attention-grabbing nature of Non-Facial emojis (Orazi et al., 2023) and the ability for Facial Emojis to replace traditional likert scales (SwaneyStueve et al., 2018), which highlights their impact on modern English. In our experiment, we sent different messages, with and without emojis, to sellers who listed headphones on Facebook Markerplace. The response rate of each condition was then calculated, along with the percentage of sellers who were willing to reduce their initial listing price. In doing so, we set out to answer...
 
-Emoji inclusion under Facebook Marketplace postings is expected to drive engagement due to their visual appeal and personal nature; they allow for an expanded layer of communicating tone and emotion in a fun and efficient manner. This should facilitate an increased likelihood of users to interact with product postings containing emojis. Previous research has already expressed the attention-grabbing nature of non-face emojis (Orazi et al., 2023) and their powerful ability to be used as a scale in lieu of traditional likert labels (SwaneyStueve et al., 2018), which highlights their impactful presence in our modern English language. By utilizing them in our message, we hope to make the mundane digital content of an online marketplace engaging to drive higher levels of interaction. In our experiment, we seek to investigate if complementary Non-Facial Emojis (NFE) or Facial Emojis (FE) affect seller behavior. “Complementary” emojis are emojis that do not substitute a word but complement the meaning of a word. We will compare two identical groups of Facebook Marketplace posts: one featuring emojis as the treatment condition and another without emojis as the control. Both posts will contain the same price, content, images, and text and only differ in terms of emoji inclusion or exclusion to determine whether the material changes of our metrics can be attributable to the emojis. Such findings would be practical for small businesses, marketing, brands, e-commerce, and many more industries to understand consumer behaviors and motivators behind user engagement.
+$$\textit{Do emojis influence seller willingness to reduce price in FB Marketplace?}$$
+
+Emojis in our messages are expected to drive engagement due to their visual appeal and personal nature. We examine whether the presence complementary Non-Facial Emojis (NFE) or Facial Emojis (FE) influences seller behavior compared to messages that do not contain any emojis. In this context, “complementary” refers to an emoji's ability to enhance meaning of a word or phrase and "facial" refers to face emojis evoking sentiment or feeling. All messages will contain the same phrasing, only differing in terms of NFE, FE, or no emoji inclusion. This allows us to draw causal inference whether observed changes in seller willingness to reduce price can be attributable to emoji-use. Such findings would be practical for small businesses, marketing, brands, e-commerce, and many more industries to understand consumer behaviors and motivators behind user engagement.
 
 # Literature Review
 
-We are investigating the direct causal effect of emoji usage on user behavior in the Facebook Marketplace; this would be summarized in metrics such as the rate at which sellers are willing to reduce their price. However, in published research about emoji usage, the majority gather observational data from large repositories like web scraping Tweets to create complex engagement models (Wang et al., 2022) , rather than designing an experiment to directly view the emoji influence. Many other studies assessed how people rated messages containing emojis (Orazi et al., 2023) but did not explicitly test how the emoji alters behavior in either a positive or negative manner. They are interested in the perception of emoji, however, we desire to understand their usefulness and practicality. Are emojis just for “fun” or can they tap into a deeper cognition within us? This experiment builds upon the study “Non-face emojis in digital marketing: Effects, contingencies, and strategic recommendations” by Orazi, et al., where the authors differentiated between Facial emojis that may elicit emotional contagion vs NF emojis that they further categorized as supplementary vs complementary emojis. Using a dataset from Airbnb, they find that NF emojis have the third-largest impact on electronic word of mouth (eWOM) volume next to seller quality and ease-of-booking. eWOM is where customers share their experiences, opinions, and recommendations on posts. They find that NF emojis can be more effective than face emojis in driving eWOM volume in digital marketplaces for regular users and not Super host users. They also found that a mix of complementary and substituting emojis or multiple substituting emojis led to worse eWOM because it reduced processing fluency. Based on this past study, we will focus on replicating the effects of using only complementary emojis on sales postings to see if it will increase how many potential sellers would be willing to reduce their initial listed price.
+In published research about emoji usage, the majority gather observational data from large repositories like web scraping Tweets to create complex engagement models (Wang et al., 2022), rather than designing an experiment to understand true casual influence. Many other studies assessed how people rated messages containing emojis (Orazi et al., 2023) but did not explicitly test how the emoji alters behavior in either a positive or negative manner. They are interested in the perception of emoji, however, we desire to understand their usefulness and practicality. This experiment builds upon the study “Non-face emojis in digital marketing: Effects, contingencies, and strategic recommendations” by Orazi, et al., where the authors express that FE may elicit more emotional contagion effects compare to NFE. Using an Airbnb dataset, they find that NFE have the third-largest impact on electronic word of mouth (eWOM) volume next to seller quality and ease-of-booking. eWOM is where customers share their experiences, opinions, and recommendations on posts. They find that NFE can be more effective than FE in driving eWOM volume in the Airbnb digital marketplace. They also found that use of too many NFE and FE led to worse eWOM because it actually reduced processing fluency to the audience. Based on this past study, we will focus on replicating the effects of using emojis on messages to see if it will increase how many potential sellers would be willing to reduce their price.
 
 # Power Analysis
 
-Considering no publications detailed the ATE of emoji inclusion for willingness to reduce price, we believed 10, 15, or 25% effect to be reasonable starting points; this was ultimately corroborated with our pilot data of 126 2 FB Marketplace messages which showcased an ATE between 10-13%. Due to platform limitations (one of our buyers, no longer had sellers to message) we capped our messages to approximately 120 per treatment group. Therefore, our power analysis utilizes sample sizes of n = 120 to determine the likelihood of detecting a statistically significant effect if one exists given our current experimental design. For a 10% ATE, a detection rate of 34% means that we would often miss the true effect (low statistical power). At 15% ATE, detection rate nearly doubled to 72.1% which still leaves substantial room for type two errors, but detects the true effect most of the time. Lastly, for a 25% ATE, we found that we would be able to detect the true effect 99.1% of the time. The data generation process and results are showcased in code below and in Figure 1.
+Considering no publications detailed the ATE of emoji inclusion for willingness to reduce price, we believed 10, 15, or 25% effect to be reasonable starting points; this was ultimately corroborated with our pilot data of 126 FB Marketplace messages which showcased an ATE between 10-13%. Due to platform limitations (one of our buyers, no longer had sellers to message) we capped our messages to approximately 120 per treatment group. Therefore, our power analysis utilizes sample sizes of n = 120 to determine the likelihood of detecting a statistically significant effect if one exists given our current experimental design. For a 10% ATE, a detection rate of 34% meant that we would often miss the true effect (low statistical power). At 15% ATE, detection rate nearly doubled to 72.1% which still leaves substantial room for type II errors, but detects the true effect most of the time. Lastly, for a 25% ATE, we found that we would be able to detect the true effect 99.1% of the time. The data generation process and results are showcased in code below and in Figure 1.
 
 ```{r sample code for 10% ATE, echo=TRUE, include=TRUE, eval=FALSE}
+# Sample code of generating 10% ATE 
+# picked arbitrary values
 
-# Generate control values with 75% 0s (FB No Response) and 25% 1s (FB Response)
+# Generate control values with 75% 0s (Willingness) and 25% 1s (No Willingness)
 d1 <- data.table(treatment = rep(0, 500))
 d1[, response := c(rep(0, 375), rep(1, 125))]
 
@@ -29,17 +33,22 @@ data <- rbind(d1, d2)
 t_test_p_values <- rep(NA, 1000) 
 
 for(sim in 1:1000) { 
-    # Resample and randomly selects 100 treatment and 100 control without replacement
+    # Resample and randomly selects 120 treatment
+    # Resample and randomly selects 120 control without replacement
     sample <- data[, .SD[sample(.N, 120)], by = treatment] 
+    
     # Run the t-test
    test_result <- t.test(response~treatment, data=sample)
+   
     # Store Pvalue from the T.Test
     t_test_p_values[sim] <-  test_result$p.value
 }
 
+#The same process is repeated for 15 and 25% ATE
+
 ```
 
-```{r fig, include=TRUE, echo=FALSE, fig.height= 2.5, fig.cap="\\label{fig:powerplots}P-value Distribution per ATE"}
+```{r fig, include=TRUE, echo=FALSE, fig.height= 2.5, fig.cap="\\label{fig:powerplots}P-value Distribution per ATE", fig.pos='H'}
 (plot10 + plot15 + plot25) + plot_annotation(
   caption = "Alpha levels of 0.05 were used; bins are at 0.05 increments; (A) 10% ATE, (B) 15% ATE, (C) 25% ATE"
 )
@@ -47,21 +56,21 @@ for(sim in 1:1000) {
 
 # Hypothesis
 
-We would like to understand the effect of using emojis on the willingness to reduce the initial price for sellers on FB Marketplace. A two-sided hypothesis test was employed to assess for effect in either direction for statistical significance. The null and alternative hypotheses used for this experiment will be as follows:
+We want understand the causal effect of using emojis on the willingness to reduce price. A two-sided hypothesis test was employed to assess for effect in either direction for statistical significance. The null and alternative hypotheses used for this experiment will be as follows:
 
 **Null Hypothesis** ($H_0$): Neither emoji treatment has impact on willingness to reduce price[^write_up-1] $$H_0: \beta_{FE} \ = \ 0 \ \ or \ \ \beta_{NFE} = 0$$
 
-[^write_up-1]: For simplicity, *FE* signifies Facial Emoji and *NFE* signifies Non-Facial Emoji for $\beta$ subscripts.
+[^write_up-1]: As mentioned previously and for simplicity, *FE* signifies Facial Emoji and *NFE* signifies Non-Facial Emoji for $\beta$ subscripts.
 
 **Alternative Hypothesis** ($H_1$): Either emoji treatment has an effect on the willingness to reduce price: $$H_1: \beta_{FE} \ \not= \ 0 \ \ or \ \ \beta_{NFE} \not= 0$$
 
 # Methodology
 
-During our experiment `r nrow(d)` sellers contacted were contacted in FB Marketplace, with an intended target of 90 different sellers per each `buyer`. Sellers were randomly selected and assigned a treatment and contacted only once to ensure no seller received more than one type of message. We assessed both the seller response rate to the message and seller's willingness to reduce the item’s price in their response. Both variables were coded as binary outcomes. The key treatment variable was the message type, which indicated whether the message contained no emoji, a facial emoji, or a complementary non-facial emoji.
+During our experiment `r nrow(d)` sellers were contacted in FB Marketplace, with an intended target of 90 different sellers per each `buyer`. Sellers were randomly selected and assigned a treatment and contacted only once to ensure no seller received more than one type of message. We assessed both the seller's willingness to reduce the item’s price in their response and the response rate. Both variables were coded as binary outcomes. The key treatment variable was message type sent to the sellers, which meant the message contained one of three possible conditions. 
 
 ## Experimental Design
 
-A between-subject randomized controlled experiment was designed (seller-level randomization), to assess the casual effect of emoji inclusion on seller engagement in FB Marketplace. Sellers listing premium headphones[^write_up-2] were targeted to minimize heterogeneity in our sample due to different products and because initial FB Marketplace assessments indicated a robust market for headphones that would make the experiment feasible. Two different treatments were employed: Non-Facial Emoji (NFE), Facial Emoji (FE) and compared against our control No Emoji (NE). These three condition messages were crafted with identical wording, tone, and inquiry interest where the only thing altered text is no emoji, a facial emoji, or a non-facial emoji at the very beginning of the message to ensure seller sees the message type in a notification or on the FB Messenger . The template message is provided below, alongside a screenshot of the three different treatment conditions in Figure \ref{messages:message}.
+A between-subject randomized controlled experiment was designed (seller-level randomization), to assess the casual effect of emoji inclusion on seller engagement in FB Marketplace. Sellers listing premium headphones[^write_up-2] were targeted to minimize heterogeneity in our sample due to different products and because initial FB Marketplace assessments indicated a robust market for headphones that would make the experiment feasible. Two different treatments were employed: Non-Facial Emoji (NFE), Facial Emoji (FE) and compared against our control No Emoji (NE). These three condition messages were crafted with identical wording, tone, and inquiry interest where the only thing altered text is NE, NFE, or FE at the very beginning of the message to ensure seller sees the message type in a notification or on the FB Messenger. The template message is provided below, alongside a screenshot of the three different treatment conditions in Figure \ref{messages:message}.
 
 [^write_up-2]: We established a price point of \$USD 100+ to be considered as *premium headphones*
 
@@ -82,17 +91,15 @@ Data was gathered through manual data entry from FB Messenger. For practicality,
 
 ## Variables
 
-*Outcome Variables*: `response`, `willingToReducePrice`\
+*Outcome Variables*: `willingToReducePrice`, `response`\
 *Independent Variables*: `buyer`, `msgTime`, `day`, `dayType`, `priceDrop`, `justListed`, `sellerGender`\
 *Treatment Condition Variable*: `emoji`
 
-## Data Cleansing
+## Data Cleansing & Exploration
 
-```{r snippet, include=TRUE, echo=FALSE}
-showcase_data
-```
+Data cleansing process involved manipulation and standardizing of multiple columns through `data.table()`. Treatment categories for emoji message types (one-hot encoded for tracking convenience) were consolidated into a single column, irrelevant variables were removed, and Weekday/Weekend categorization was created from `day` variable. Categorical variables were turned into factors with defined levels and time data was formatted for improved interpretability. Column names were altered to lower camel case for consistency and ease of use with rmarkdown latex output configurations. 
 
-Data cleaning process involved manipulation and standardizing of multiple columns through `r `data.table()`. Treatment categories for emoji message types (one-hot encoded for tracking convenience) were consolidated into a single column, irrelevant variables were removed, and Weekday/Weekend categorization was created from `r day` variable. Categorical variables were turned into factors with defined levels and time data was formatted for improved interpretability. Column names were altered to lower camel case for consistency and ease of use with rmarkdown latex output configurations. Data was checked and confirmed to not possess any missing values. All modification were necessary for clarity and usability of the data, ensuring it was well-suited for subsequent analysis. Data cleansing process is captured in code below and our data is shown in Table \@ref(tab:datacleaning) for understanding of how our variables are encoded.
+Data was checked and confirmed to not possess any missing values or inconsistencies. All modification were necessary for clarity and usability of the data, ensuring it was well-suited for subsequent analysis. As part of our data exploration, we plotted figures such as bar plots and histograms and produced summary tables describing distributions of variables to visually examine any potential underlying issues. However, despite this, we could not find any readily apparent issues or anomalies in our collected data, giving us confidence in the integrity of our data. Process for data cleansing is captured in code below, a snippet of our data is shown in Table \@ref(tab:datacleaning) for understanding of how our variables are encoded, and data exploration is highlighted in Figure \ref{dist:fig} and Table \@ref(tab:tabapp) in the Appendix.
 
 ```{r data cleaning sample, include=TRUE, eval=FALSE, echo=TRUE}
 # single col for one hot encoded
@@ -147,15 +154,19 @@ showcase_data <- kable(head(d, 3)[,c(4:11)], caption = "Snippet of Data",
 colSums(is.na(d))
 ```
 
+```{r snippet, include=TRUE, echo=FALSE}
+showcase_data
+```
+
 ## Tests
 
-Three regression models were developed to evaluate the relationship between message type and a seller’s willingness to reduce price. We tested these models using R standard coeftest() to test the statistical significance of the coefficients in the linear regression models with robust standard error to mitigate potential heteroskedasticity biases in the error estimates.
+Three regression models were developed to evaluate the relationship between message type and a seller’s willingness to reduce price. We tested these models using R v4.3.2 `coeftest()` to test the statistical significance of the coefficients in the linear regression models with robust standard errors (`HC1`) to mitigate potential heteroskedasticity biases in the error estimates.
 
-Model 1 included a basic specification where the dependent variable, willing_to_reduce_price, was regressed on the primary treatment and control variables: No Emoji, NFE (Non-Facial Emoji), and FE (Facial Emoji) Facebook messages.
+$Model_1$ included a basic specification where the dependent variable, `willingToReducePrice`, was regressed on the primary treatment and control variable `emoji`  (NE, NFE, and FE messages).
 
-Model 2 extended Model 1 by including the seller’s gender as an additional covariate to control for potential gender-related differences in negotiation behavior.
+$Model_2$ extended $Model_1$ by including the seller’s gender as an additional covariate to control for potential gender-related differences in negotiation behavior.
 
-Model 3 further expanded the model by incorporating a broader set of covariates: the buyer identifier, message time, message day, whether the item had experienced a price drop, whether the item was recently listed, and the seller’s gender.
+$Model_3$ further expanded the model by incorporating a broader set of covariates: the buyer identifier, message time, message day, whether the item had experienced a price drop, whether the item was recently listed, and the seller’s gender.
 
 We also explored whether the effect of message type on a seller’s willingness to reduce price varied by the seller’s gender. To assess potential interaction effects between seller gender and message type, we ran the saturated Model 3 separately for male and female sellers. This approach allowed us to examine whether treatment effects differed by gender by filtering the dataset to include only male sellers in one model and only female sellers in another.
 
@@ -168,24 +179,30 @@ combined_tbl
 
 ```
 
-Our main focus is how emoji treatments affect a seller’s willingness to reduce price. We ran three models. Model 1 included only emoji type (Control, Non-Facial, and Facial) as the predictor. Model 2 added seller gender. Model 3, our saturated model, included additional covariates: buyer ID, message time, day of week, price drop, just listed status, and seller gender.
+We ran three models for a seller's willingness to reduce price. $Model_1$ included only `emoji` (Control, Non-Facial, and Facial) as the predictor. $Model_2$ added completely by including `sellerGender`. $Model_3$, our saturated model, included all additional covariates: `buyer`, `msgTime`, `day`, `priceDrop`, `justListed`, and `sellerGender`. All models are combined into a single table for easier referencing in Table \@ref(tab:willingtab).
 
-In all three models, both Non-Facial and Facial emojis were associated with a statistically significant decrease in willingness to reduce price compared to the Control group (no emoji). So instead of driving more flexibility, the presence of emojis made sellers less likely to offer discounts. In the saturated model, the average treatment effects (ATE) were -0.18 for Non-Facial (p = 0.004) and -0.17 for Facial (p = 0.004), meaning that emoji use decreased the probability of a seller offering a price cut by roughly 17–18 percentage points relative to Control. Baseline averages confirm this pattern. In the control group, willingness to reduce was `r d[emoji == "Control", round(mean(willingToReducePrice) * 100, 1)]%`. In the Non-Facial group, that dropped to `r d[emoji == "Non-Facial", round(mean(willingToReducePrice) * 100, 1)]%`, and for Facial it was even lower at `r d[emoji == "Facial", round(mean(willingToReducePrice) * 100, 1)]%`.
+In all three models, both Non-Facial and Facial emojis were associated with a statistically significant decrease in willingness to reduce price compared to the Control group (no emoji). So instead of driving more flexibility, the presence of emojis made sellers less likely to offer discounts. In the saturated model, the average treatment effects (ATE) were `r round(model3_robust[2,1],2)` for Non-Facial (p = 0.004) and `r round(model3_robust[3,1], 2)` for Facial (p = 0.004), meaning that emoji use decreased the probability of a seller offering a price cut by roughly 17–18% relative to Control. Baseline averages confirm this pattern. In the control NE group, willingness to reduce was `r d[emoji == "Control", round(mean(willingToReducePrice) * 100, 1)]`%. In the NF group, that dropped to `r d[emoji == "Non-Facial", round(mean(willingToReducePrice) * 100, 1)]`%, and for FE it was even lower at `r d[emoji == "Facial", round(mean(willingToReducePrice) * 100, 1)]`%. Similarly, as reported in Table \@ref(tab:responsemodels) response rates followed comparable patterns, with both NF and FE being less likely to respond than the Control group. This reinforces the idea that emoji-use, rather than enhancing engagement, may have a counterproductive effect on both response rates and willingness to negotiate price.
 
-We also estimated Model 3 separately for male and female sellers. Among male sellers, both treatments (NFE and FE) had strong negative effects that were statistically significant. Among female sellers, the effects were in the same direction but didn’t reach significance. This suggests that the presence of emojis is more detrimental when messaging male sellers.
+```{r willingtab, include=TRUE, results='asis'}
+# display combined table 
+combined_willingness_tbl<- tbl_merge(list(tbl_model1, tbl_model2, tbl_model3), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated**")) %>% 
+  modify_caption("All Willingness to Reduce Price Models") %>%
+  as_gt() %>%
+  as_latex()
 
-To confirm the model’s value, we checked that our covariables were random and did not predict the treatment affect. Comparing a simple model vs a saturated model, it showed from the F-test that the covariables did not predict the treatment affect significant. Variance Inflation Factor (VIF) scores showed no multicollinearity issues.
+# landscape mode
+ls_combined_willingness_tbl <- paste0(
+  "\\begin{landscape}\n",
+  combined_willingness_tbl,
+  "\n\\end{landscape}"
+)
 
-```{r, include = TRUE}
-tbl_model_response_1 %>%
-    as_gt() %>%
-    tab_options(latex.tbl.pos = "H")
-```
+# display
+cat(ls_combined_willingness_tbl)
 
-```{r, include = TRUE}
-tbl_model1 %>%
-    as_gt() %>%
-    tab_options(latex.tbl.pos = "H")
 ```
 
 ```{r, include=TRUE, echo=TRUE, eval=FALSE}
@@ -220,22 +237,7 @@ tbl_model3 <-
 
 ```
 
-```{r, include=TRUE, results='asis'}
-# display combined table 
-cat(ls_combined_willingness_tbl)
-
-```
-
-```{r, include=TRUE, results='asis'}
-# display recoded table
-cat(ls_combined_willingness_tbl_recoded)
-```
-
-# Discussion
-
-The findings of this study provide preliminary experimental evidence that the use of emojis in buyer messages on Facebook Marketplace can negatively influence seller behavior. Contrary to expectations, sellers were significantly less likely to reduce their price when messages included emojis, both facial and non-facial, compared to messages with no emojis. This result challenges the common belief that emojis universally enhance communication by adding emotional tone or visual appeal.
-
-While prior literature has suggested that complementary emojis may aid engagement without reducing processing fluency, our results indicate that in transactional contexts, even well-intentioned emoji use can backfire. Facial emojis, in particular, performed the worst in both response rate and willingness to negotiate. These effects were especially pronounced among male sellers, suggesting possible gender-based differences in how such messages are interpreted. Together, these findings highlight the importance of understanding audience expectations in digital communication and suggest that simplicity may be more effective than expressiveness when initiating contact in peer-to-peer marketplaces.
+Due to the interesting underlying balance of sellers in the premium headphone market, `r round(d[,mean(sellerGender == "M")] * 100,1)`% male and `r round(d[,mean(sellerGender == "F")] * 100,1)`% female, we believed there to be potential for gender based effects. Therefore, we estimated $Model_3$ separately for male and female sellers by partioning the data with `data.table()` between the two genders. Among male sellers, both treatments (NFE and FE) had strong negative effects that were statistically significant. Among female sellers, the effects were in the same direction but didn’t reach significance. This suggests that the presence of emojis is more detrimental when messaging male sellers. Code and table output for those results are summarized below. 
 
 ```{r, include=TRUE, echo=TRUE, eval=FALSE}
 #gender specific subanalysis
@@ -251,7 +253,6 @@ model_female <- d[sellerGender == "F",
 #robust SE for genders
 male_robust <- coeftest(model_male, vcov = vcovHC(model_male, type = "HC1"))
 female_robust <- coeftest(model_female,  vcov = vcovHC(model_female, type = "HC1"))
-
 
 #male table
 tbl_male <- 
@@ -304,10 +305,10 @@ combined_gender<- tbl_merge(list(tbl_female, tbl_male),
 cat(combined_gender)
 ```
 
-```{r, include=TRUE, echo=TRUE}
-# Checking for randomness in covariate
+Additionally, to confirm the model’s validity, we verified that the covariates were randomly distributed with respect to treatment assignment and did not predict the treatment effect. An F-test comparing a simple model to a saturated model indicated that the covariates did not significantly predict outcomes. Variance Inflation Factor (VIF) scores also showed no multicollinearity issues.
 
-# Do a F-test  to compare full model to null mode with no predictive features
+```{r, include=TRUE, echo=TRUE}
+# F-test  to compare full model to null mode with no predictive features
 # Create a new table with the transformed 'emoji' column
 new_table <- copy(d)
 
@@ -335,9 +336,25 @@ vif_values_response
 
 ```
 
+# Discussion
+
+The findings of this study provide preliminary experimental evidence that the use of emojis in buyer messages on Facebook Marketplace can negatively influence seller behavior. Contrary to expectations, sellers were significantly less likely to reduce their price when messages included emojis, both facial and non-facial, compared to messages with no emojis. This result challenges the common belief that emojis universally enhance communication by adding emotional tone or visual appeal.
+
+While prior literature has suggested that complementary emojis may aid engagement without reducing processing fluency, our results indicate that in transactional contexts, even well-intentioned emoji use can backfire. Facial emojis, in particular, performed the worst in both response rate and willingness to negotiate. These effects were especially pronounced among male sellers, suggesting possible gender-based differences in how such messages are interpreted. Together, these findings highlight the importance of understanding audience expectations in digital communication and suggest that simplicity may be more effective than expressiveness when initiating contact in peer-to-peer marketplaces.
+
+We also explored whether more meaningful day variables impacted seller behavior by recoding message days into weekday versus weekend categories. While this temporal variable did not yield any statistically significant effects on seller willingness to reduce price (Table \@ref(tab:willingnessrecoded)), we did observe a notable difference in response rates. Sellers were statistically significantly less responsive to messages sent during the weekend as shown in Table \@ref(tab:responserecoded) in the Appendix, suggesting that timing may play a subtle but relevant role in initiating engagement. Though these effects were not the primary focus of the study, they raise interesting questions about the rhythm of online activity and how platform engagement patterns may alter communication outcomes.
+
 # Limitations
 
-Limitations that affect the generalizability of our findings are as follows. 1. Our experiment was conducted in largely metropolitan areas that may not be generalizable to rural communities or others with different demographics. 2. The participants of this study that sent out the Facebook messages were all male, so we may have widely different treatment effects if the messenger is a female. 3. Participants who sent out messages had different profile images, history/ratings on Facebook marketplace, and of different ethnicities, which may have impacted the treatment effects. 4. Treatment was delivered to users selling pricey headphones over \$100. Facebook users who sell and own expensive headphones may react differently to the treatment compared to Facebook users that sell other items. It would be difficult to generalize to all types of items sold on the marketplace.
+Limitations that affect the generalizability of our findings are as follows: 
+
+1. Our experiment was conducted in largely metropolitan areas that may not be generalizable to rural communities or others with different demographics. 
+
+2. The participants of this study that sent out the Facebook messages were all male, so we may have widely different treatment effects if the messenger is a female. 
+
+3. Participants who sent out messages had different profile images, history/ratings on Facebook marketplace, and of different ethnicities, which may have impacted the treatment effects. 
+
+4. Treatment was delivered to users selling pricey headphones over \$100. Facebook users who sell and own expensive headphones may react differently to the treatment compared to Facebook users that sell other items. It would be difficult to generalize to all types of items sold on the marketplace.
 
 # Conclusions
 

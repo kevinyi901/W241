@@ -1,6 +1,10 @@
 # Appendix
 
-```{r, include=TRUE, results='asis'}
+```{r, fig.cap = "\\label{dist:fig}Combined Treatment Distribution", include=TRUE, out.width='8in', fig.width=12, fig.height=8, out.extra='angle=90', fig.align="center", fig.pos='H'}
+combinedplots
+```
+
+```{r tabapp, include=TRUE, results='asis'}
 combined_tbl_reformat <- combined_tbl %>%
   modify_caption("Combined Table") %>%
   as_gt() %>%
@@ -18,12 +22,68 @@ cat(combined_tbl_reformat)
 
 ```
 
-```{r, include =TRUE, results = 'asis'}
+```{r responsemodels, include =TRUE, results = 'asis'}
+# Outcome: Response 
+# combined table of all models
+combined_response_tbl<- tbl_merge(list(tbl_model_response_1, tbl_model_response_2, tbl_model_response_3), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated**")) %>% 
+  modify_caption("All Response Models") %>%
+  as_gt() %>%
+  as_latex()
+
+# landscape mode
+ls_combined_response_tbl <- paste0(
+  "\\begin{landscape}\n",
+  combined_response_tbl,
+  "\n\\end{landscape}"
+)
+
+# display
 cat(ls_combined_response_tbl)
 
 ```
 
-```{r, include =TRUE, results = 'asis'}
+```{r willingnessrecoded, include=TRUE, results='asis'}
+combined_willingness_tbl_recoded<- tbl_merge(list(tbl_model1, tbl_model2, tbl_model3_recoded), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated Recoded**")) %>% 
+  modify_caption("All Willingness Models with Recoded Weekday/Weekend") %>%
+  as_gt() %>%
+  as_latex()
+
+# landscape mode
+ls_combined_willingness_tbl_recoded <- paste0(
+  "\\begin{landscape}\n",
+  combined_willingness_tbl_recoded,
+  "\n\\end{landscape}"
+)
+
+# display
+cat(ls_combined_willingness_tbl_recoded)
+```
+
+```{r responserecoded, include =TRUE, results = 'asis'}
+combined_response_tbl_recoded<- tbl_merge(list(tbl_model_response_1, tbl_model_response_2, tbl_model_response_3_recoded), 
+                                  tab_spanner = c("$Model_1$ : **Base**", 
+                                                  "$Model_2$ : **Middle**", 
+                                                  "$Model_3$ : **Saturated Recoded**")) %>% 
+  modify_caption("All Response Models with Recoded Weekday/Weekend") %>%
+  as_gt() %>%
+  as_latex()
+
+# landscape mode
+ls_combined_response_tbl_recoded <- paste0(
+  "\\begin{landscape}\n",
+  combined_response_tbl_recoded,
+  "\n\\end{landscape}"
+)
+
+# display
 cat(ls_combined_response_tbl_recoded)
+
+
 ```
 
