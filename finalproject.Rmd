@@ -1,36 +1,66 @@
 ---
-title: "Final Project"
-author: "Kevin Yi, Missael Vasquez, Patrick Abousleiman, Maged Saad"
-date: "04/02/2025"
+title: "Do emojis speak louder than words?"
+subtitle: "Decoding the power of emojis in Facebook Marketplace Messages"
+author: "Kevin Yi, Maged Saad, Missael Vasquez, Patrick Abousleiman"
+date: "04/09/2025"
+header-includes:
+   - \usepackage{float}
+   - \usepackage{lipsum}
+   - \usepackage{subfig}
+   - \usepackage{pdflscape}
 output:
-  pdf_document: default
-  word_document: default
-name: Kevin Yi, Missael Vasquez, Patrick Abousleiman, Maged Saad 
+  bookdown::pdf_document2: 
+    number_sections: true
+    fig_caption: yes
+    tab_caption: yes
+fontsize: 10pt
 ---
 
-```{r load packages, message = FALSE}
+```{r load packages, message = FALSE, warning=FALSE, include=FALSE}
 library(data.table)
-
 library(sandwich)
 library(lmtest)
-
 library(AER) 
-
 library(ggplot2) 
 library(patchwork)
-library(car)
+library(gtsummary)
+library(chron)
+library(kableExtra)
+library(ggpubr)
+library(magrittr)
+library(dplyr)
+library(tidyverse)
+library(knitr)
+library(stargazer)
+library(xtable)
+library(scales)
+library(e1071)
+library(gt)
+library(gridExtra)
+library(grid)
+library(gtable)
+library(janitor)
+library(latex2exp)
+library(snakecase)
+library(cowplot)
+library(png)
 ```
 
 ```{r global options, include = FALSE}
-knitr::opts_chunk$set(include = FALSE, message = FALSE, warning = FALSE )
-
-knitr::knit_engines$set(problem_description = function(options) {
-  code <- paste(options$code, collapse = "\n")
-})
+knitr::opts_chunk$set(echo = FALSE, include = FALSE, message = FALSE, warning = FALSE, fig.cap = NULL, tab.cap = NULL, table.caption = NULL)
 
 ```
 
-```{r Modeling, child='./model.Rmd'}
+```{r Modeling and Code, child='./model.Rmd', results='hide', echo=FALSE, include=FALSE}
 ```
+
 \newpage
+
+```{r Clean Write Up, child = './write_up.Rmd'}
+```
+
+\newpage
+
+```{r Appendix, child = './appendix.Rmd'}
+```
 

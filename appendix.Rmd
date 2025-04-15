@@ -1,0 +1,29 @@
+# Appendix
+
+```{r, include=TRUE, results='asis'}
+combined_tbl_reformat <- combined_tbl %>%
+  modify_caption("Combined Table") %>%
+  as_gt() %>%
+  as_latex()
+
+# landscape mode
+combined_tbl_reformat <- paste0(
+  "\\begin{landscape}\n",
+  combined_tbl_reformat,
+  "\n\\end{landscape}"
+)
+
+# display
+cat(combined_tbl_reformat)
+
+```
+
+```{r, include =TRUE, results = 'asis'}
+cat(ls_combined_response_tbl)
+
+```
+
+```{r, include =TRUE, results = 'asis'}
+cat(ls_combined_response_tbl_recoded)
+```
+
