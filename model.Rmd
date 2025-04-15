@@ -340,7 +340,25 @@ loc_plot <- ggplot(d, aes(x = location)) +
     y = "Count"
   )
 
+# Bar plot of Price Drop
+pricedrop_plot <- ggplot(d, aes(x = priceDrop)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Recent Price Drop",
+    x = "Price Drop",
+    y = "Count"
+  )
 
+# Bar plot of Just Listed
+listed_plot <- ggplot(d, aes(x = justListed)) +
+  geom_bar() +
+  labs(
+    title = "Bar Plot of Recently Listed",
+    x = "Just Listed",
+    y = "Count"
+  )
+
+    
 #Histogram of time message was sent
 #adjusted original off-centering
 time_plot <- ggplot(d, aes(x = as.numeric(msgTime))) +
@@ -365,6 +383,8 @@ day_plot
 response_plot
 loc_plot
 time_plot
+pricedrop_plot
+listed_plot
 
 plotbuyer
 plotday
@@ -374,6 +394,7 @@ plotresponse
 plotsellerGender
 plotwillingToReducePrice
 plotmsgTime
+
 
 ``` 
 
@@ -496,27 +517,31 @@ tbl_model_response_3
 
 ```{r  response check covariate randomeness and collinearity , include=FALSE}
 # Checking for randomness in covariate
-# Do a F-test  to compare full model_response_ to model_response_ with no predictive features
-null_model_response <- lm(response ~ 1, data = d)
-full_model_response <- lm(response ~ 1+ emoji + buyer + msgTime + day + 
-                   priceDrop + justListed + sellerGender, data = d)
 
-# Perform an F-test
-anova_mod_response <- anova(null_model_response, full_model_response, test = 'F')
+# Do a F-test  to compare full model to null mode with no predictive features
+# Create a new table with the transformed 'emoji' column
+new_table <- copy(d)
+
+# Update the 'emoji' column in the new table
+new_table[, emoji := fcase(
+  emoji == "Non-Facial", 1,
+  emoji == "Facial", 2,
+  emoji == "Control", 0
+)]
+# Fit full model
+full_model <- lm(emoji ~ 1+ buyer + msgTime + day + 
+                   priceDrop + justListed + sellerGender, data = new_table)
+
+# Fit null model (intercept only)
+null_model <- lm(emoji ~ 1, data = new_table)
+
+# Compare models
+anova_mod_response <- anova(null_model, full_model, test = "F")
 anova_mod_response
 
-#anova table 
-anova_tbl <- broom::tidy(anova_mod_response)
-
-anova_tbl <- anova_tbl %>%
-  gt() %>%
-  tab_header(
-    title = "ANOVA table"
-  ) %>%
-  fmt_number(columns = where(is.numeric), decimals =3)
 
 # Check for multicollinearty
-vif_values_response <- vif(full_model_response)
+vif_values_response <- vif(full_model)
 vif_values_response
 
 # vif table
