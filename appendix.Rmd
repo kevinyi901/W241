@@ -1,6 +1,6 @@
 # Appendix
 
-```{r, fig.cap = "\\label{dist:fig}Combined Treatment Distribution", include=TRUE, out.width='8in', fig.width=12, fig.height=8, out.extra='angle=90', fig.align="center", fig.pos='H'}
+```{r, fig.cap = "\\label{dist:fig}Combined Treatment Distribution", include=TRUE, out.width='8in', fig.width=14, fig.height=10, out.extra='angle=90', fig.align="center", fig.pos='H'}
 combinedplots
 ```
 
